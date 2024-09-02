@@ -26,7 +26,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ onProductAdded })
   return (
     <form onSubmit={handleSubmit} className="create-product-form">
       <div className="form-group">
-        <label htmlFor="name">Product Name</label>
+        <label htmlFor="name">Nombre de Producto</label>
         <input
           type="text"
           id="name"
@@ -36,16 +36,15 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ onProductAdded })
         />
       </div>
       <div className="form-group">
-        <label htmlFor="price">Product Price</label>
+        <label htmlFor="price">Precio de Produto</label>
         <input
           type="number"
           id="price"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
+
           required
         />
       </div>
-      <button type="submit">Add Product</button>
+      <button type="submit">Agregar Producto</button>
     </form>
   );
 };
