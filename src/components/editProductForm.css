@@ -1,0 +1,54 @@
+/* Contenedor del formulario de edición */
+.edit-product-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  /* Formulario de edición */
+  .edit-product-form {
+    background: linear-gradient(rgb(20, 136, 156), rgb(22, 3, 133));
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  /* Campos del formulario */
+  .edit-form-group {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  
+  .edit-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .edit-form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  /* Botón de envío */
+  .edit-submit-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .edit-submit-button:hover {
+    background-color: #45a049;
+  }
+  

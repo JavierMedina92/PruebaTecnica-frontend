@@ -1,28 +1,32 @@
 // src/components/CreateProductForm.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import './CreateProductForm.css';
 
-const CreateProductForm: React.FC = () => {
+interface CreateProductFormProps {
+  onProductAdded: () => void;
+}
+
+const CreateProductForm: React.FC<CreateProductFormProps> = ({ onProductAdded }) => {
   const [name, setName] = useState('');
-  const [price, setPrice] = useState<number | string>('');
+  const [price, setPrice] = useState(0);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       await axios.post('http://localhost:3000/products', { name, price });
+      onProductAdded();
       setName('');
-      setPrice('');
-      alert('Product created successfully!');
+      setPrice(0);
     } catch (error) {
       console.error('Error creating product', error);
-      alert('Failed to create product');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Nombre de Producto:</label>
+    <form onSubmit={handleSubmit} className="create-product-form">
+      <div className="form-group">
+        <label htmlFor="name">Product Name</label>
         <input
           type="text"
           id="name"
@@ -31,17 +35,17 @@ const CreateProductForm: React.FC = () => {
           required
         />
       </div>
-      <div>
-        <label htmlFor="price">Precio:</label>
+      <div className="form-group">
+        <label htmlFor="price">Product Price</label>
         <input
           type="number"
           id="price"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setPrice(Number(e.target.value))}
           required
         />
       </div>
-      <button type="submit">Create Product</button>
+      <button type="submit">Add Product</button>
     </form>
   );
 };

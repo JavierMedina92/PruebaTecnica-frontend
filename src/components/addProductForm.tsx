@@ -1,76 +1,51 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import './AddProductForm.css';
 
-interface ProductFormValues {
-  name: string;
-  price: number;
+interface AddProductFormProps {
+  onProductAdded: () => void;
 }
 
-const AddProductForm: React.FC = () => {
-  const [formValues, setFormValues] = useState<ProductFormValues>({
-    name: '',
-    price: 0,
-  });
-  const [error, setError] = useState<string | null>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: name === 'price' ? parseFloat(value) : value,
-    });
-  };
+const AddProductForm: React.FC<AddProductFormProps> = ({ onProductAdded }) => {
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add product');
-      }
-
-      setFormValues({ name: '', price: 0 });
-      alert('Product added successfully');
+      await axios.post('http://localhost:3000/products', { name, price });
+      setName('');
+      setPrice('');
+      onProductAdded();
     } catch (error) {
-      setError('Error adding product');
-      console.error('Error:', error);
+      console.error('Error adding product', error);
     }
   };
 
   return (
-    <div>
-      <h2>Add Product</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Product Name:</label>
+    <div className="form-container">
+      <form className="add-product-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name">Product Name</label>
           <input
             type="text"
             id="name"
-            name="name"
-            value={formValues.name}
-            onChange={handleChange}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label htmlFor="price">Price:</label>
+        <div className="form-group">
+          <label htmlFor="price">Product Price</label>
           <input
             type="number"
             id="price"
-            name="price"
-            value={formValues.price}
-            onChange={handleChange}
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             required
           />
         </div>
-        <button type="submit">Add Product</button>
+        <button type="submit" className="submit-button">Add Product</button>
       </form>
     </div>
   );

@@ -1,53 +1,59 @@
-// src/components/ProductList.tsx
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import EditProductForm from './EditProductForm';
-import { Product } from '../models/Product';
+import './ProductList.css'; // Asegúrate de que este archivo exista
+import { Product } from '../models/Product'; // Verifica que la ruta sea correcta
 
-const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+interface ProductListProps {
+  products: Product[];
+  onProductEdited: () => void;
+}
 
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await axios.get('http://localhost:3000/products');
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products', error);
-      }
-    }
-    fetchProducts();
-  }, []);
-
-  const handleDelete = async (id: number) => {
-    try {
-      await axios.delete(`http://localhost:3000/products/${id}`);
-      setProducts(products.filter((product) => product.id !== id));
-    } catch (error) {
-      console.error('Error deleting product', error);
-    }
-  };
+const ProductList: React.FC<ProductListProps> = ({ products, onProductEdited }) => {
+  const [editingProduct, setEditingProduct] = React.useState<Product | null>(null);
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:3000/products/${id}`);
+      onProductEdited(); // Refresca la lista de productos después de eliminar
+    } catch (error) {
+      console.error('Error deleting product', error);
+    }
+  };
+
+  const handleCloseEdit = () => {
+    setEditingProduct(null);
+    onProductEdited(); // Refresca la lista después de editar
+  };
+
   return (
-    <div>
-      <h2>Product List</h2>
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            {product.name} - ${product.price}
-            <button onClick={() => handleEdit(product)}>Edit</button>
-            <button onClick={() => handleDelete(product.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      {editingProduct && (
-        <EditProductForm product={editingProduct} onClose={() => setEditingProduct(null)} />
-      )}
+    <div className="product-list-container">
+      {editingProduct && <EditProductForm product={editingProduct} onClose={handleCloseEdit} />}
+      <table className="product-table">
+        <thead>
+          <tr>
+            <th>Nombre de Producto</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map(product => (
+            <tr key={product.id}>
+              <td>{product.name}</td>
+              <td>${product.price.toFixed(2)}</td>
+              <td>
+                <button onClick={() => handleEdit(product)}>Edit</button>
+                <button onClick={() => handleDelete(product.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
