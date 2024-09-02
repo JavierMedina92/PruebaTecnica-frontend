@@ -9,15 +9,20 @@ interface CreateProductFormProps {
 
 const CreateProductForm: React.FC<CreateProductFormProps> = ({ onProductAdded }) => {
   const [name, setName] = useState('');
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState<string>(''); // Cambiado a string vacío
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:3000/products', { name, price });
-      onProductAdded();
-      setName('');
-      setPrice(0);
+      await axios.post('http://localhost:3000/products', { name, price: parseFloat(price) });
+      // Confirmación de éxito
+      const confirmed = window.confirm('Registro De Producto Exitoso');
+      if (confirmed) {
+        // Limpia el formulario si se acepta el mensaje
+        setName('');
+        setPrice(''); // Limpia el input de precio
+        onProductAdded();
+      }
     } catch (error) {
       console.error('Error creating product', error);
     }
@@ -36,11 +41,12 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ onProductAdded })
         />
       </div>
       <div className="form-group">
-        <label htmlFor="price">Precio de Produto</label>
+        <label htmlFor="price">Precio de Producto</label>
         <input
           type="number"
           id="price"
-
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
           required
         />
       </div>

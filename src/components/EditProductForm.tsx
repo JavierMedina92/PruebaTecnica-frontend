@@ -14,11 +14,18 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose }) =
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3000/products/${product.id}`, { name, price });
-      onClose();
-    } catch (error) {
-      console.error('Error updating product', error);
+
+    const confirmUpdate = window.confirm('¿Estás seguro de que los datos a actualizar son correctos?');
+    
+    if (confirmUpdate) {
+      try {
+        await axios.put(`http://localhost:3000/products/${product.id}`, { name, price });
+        onClose();
+      } catch (error) {
+        console.error('Error al actualizar el producto', error);
+      }
+    } else {
+      console.log('Actualización cancelada por el usuario.');
     }
   };
 
