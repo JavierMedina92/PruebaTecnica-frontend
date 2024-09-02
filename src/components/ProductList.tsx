@@ -17,11 +17,15 @@ const ProductList: React.FC<ProductListProps> = ({ products, onProductEdited }) 
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await axios.delete(`http://localhost:3000/products/${id}`);
-      onProductEdited(); // Refresca la lista de productos después de eliminar
-    } catch (error) {
-      console.error('Error deleting product', error);
+    const confirmed = window.confirm('¿Estás seguro de que deseas eliminar este producto?');
+    if (confirmed) {
+      try {
+        await axios.delete(`http://localhost:3000/products/${id}`);
+        onProductEdited(); // Refresca la lista de productos después de eliminar
+        window.alert('Registro eliminado con éxito'); // Alerta de eliminación exitosa
+      } catch (error) {
+        console.error('Error al eliminar el producto', error);
+      }
     }
   };
 
@@ -47,8 +51,8 @@ const ProductList: React.FC<ProductListProps> = ({ products, onProductEdited }) 
               <td>{product.name}</td>
               <td>${product.price.toFixed(2)}</td>
               <td>
-                <button onClick={() => handleEdit(product)}>Edit</button>
-                <button onClick={() => handleDelete(product.id)}>Delete</button>
+                <button onClick={() => handleEdit(product)}>Editar</button>
+                <button onClick={() => handleDelete(product.id)}>Eliminar</button>
               </td>
             </tr>
           ))}

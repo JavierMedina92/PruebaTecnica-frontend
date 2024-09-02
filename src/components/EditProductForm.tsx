@@ -30,7 +30,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose }) =
     <div className="form-container">
       <form className="edit-product-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Product Name</label>
+          <label htmlFor="name">Nombre de Producto</label>
           <input
             type="text"
             id="name"
@@ -40,7 +40,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose }) =
           />
         </div>
         <div className="form-group">
-          <label htmlFor="price">Product Price</label>
+          <label htmlFor="price">Precio de Producto</label>
           <input
             type="number"
             id="price"
@@ -49,8 +49,8 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onClose }) =
             required
           />
         </div>
-        <button type="submit" className="submit-button">Save Changes</button>
-        <button type="button" onClick={onClose} className="cancel-button">Cancel</button>
+        <button type="submit" className="submit-button">Guardar Cambios</button>
+        <button type="button" onClick={onClose} className="cancel-button">Cancelar</button>
       </form>
     </div>
   );
